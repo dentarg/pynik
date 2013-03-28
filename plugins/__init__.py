@@ -7,4 +7,4 @@ __all__ = ['plugins', 'command_catcher', 'first_plugin', 'auto_join', 'aduno',
             'tenta', 'prisjakt', 'spotify', 'down', 'metacritic',
             'notes', 'fml', 'systembolaget', 'randombuy', 'festern_bbq',
             'compliment', 'roulette', 'tyda', 'char', 'tweet',
-            'erekebabfredag', 'github']
+            'erekebabfredag', 'github', 'quote']
