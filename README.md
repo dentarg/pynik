@@ -2,7 +2,7 @@
 
 A Python IRC bot.
 
-![](botnik.png)
+![](https://raw.github.com/dentarg/pynik/master/botnik.png)
 
 ## Environment variables
 
