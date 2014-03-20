@@ -2,6 +2,8 @@
 
 A Python IRC bot.
 
+![](botnik.png)
+
 ## Environment variables
 
 Configure your bot with environment variables:
