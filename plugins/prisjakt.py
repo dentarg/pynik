@@ -11,7 +11,7 @@ from commands import Command
 def decode_characters(encoded_string):
 	decoded_string = encoded_string.decode('unicode_escape')
 	return re.sub(r'\\(.)', r'\1', decoded_string)
-	
+
 def prisjakt_search(query_string):
 	# Build URLs
 	url_base = 'http://www.prisjakt.nu/ajax/jsonajaxserver.php?'
@@ -60,7 +60,7 @@ def prisjakt_search(query_string):
 				encoded_title = title_match.group(1)
 			else:
 				encoded_title = "Unknown title"
-		
+
 		# Remove HTML tags
 		encoded_title = string.replace(
 				encoded_title, "<span class=\\\"search_hit\\\">", "")
@@ -97,10 +97,10 @@ def prisjakt_product(url):
 	if not title_match:
 		# Failure
 		return "Could not extract product info :("
-	
+
 	# Success
 	title = utility.unescape(title_match.group(2))
-	
+
 	# Look for price
 	price_pattern = "&auml;gsta: \<span class=\"pris\">(.|\n)(\d+:-)\<\/span\>"
 	price_match = re.search(price_pattern, data)
@@ -112,27 +112,27 @@ def prisjakt_product(url):
 class PrisjaktCommand(Command):
 	def __init__(self):
 		pass
-		
+
 	def trig_prisjakt(self, bot, source, target, trigger, argument):
 		"""Command used to search the Swedish price comparison web site www.prisjakt.nu"""
-		
+
 		# Sanitize argument
 		argument = argument.strip()
 		if not argument:
 			return "Usage: .prisjakt <product name> | .prisjakt <product page url>"
-		
+
 		if re.match("http:\/\/www\.prisjakt\.nu\/(bok|produkt).php\?\w+=\d+", argument):
 			# Parse product page
 			return prisjakt_product(argument)
-			
+
 		else:
 			# Search for products
-			
+
 			# We want to use latin1 encoding, i.e. %F6 instead of %C3B6
 			argument = urllib.quote_plus(argument, 'åäöÅÄÖ')
 			translation = { 'å': '%E5', 'ä': '%E4', 'ö': '%F6', 'Å': '%C5', 'Ä': '%C4', 'Ö': '%D6' }
 			for key in translation.keys():
 				argument = argument.replace(key, translation[key])
-			
+
 			return prisjakt_search(argument)
 

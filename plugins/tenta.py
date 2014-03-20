@@ -11,40 +11,40 @@ class StrippingParser(sgmllib.SGMLParser):
     """**NOTE:** Borrowed from http://code.activestate.com/recipes/52281/"""
 
     from htmlentitydefs import entitydefs # replace entitydefs from sgmllib
-    
+
     def __init__(self, valid_tags=None):
         self.valid_tags = valid_tags if valid_tags is not None else ()
         sgmllib.SGMLParser.__init__(self)
         self.result = ""
-        self.endTagList = [] 
-        
+        self.endTagList = []
+
     def handle_data(self, data):
         if data:
             self.result = self.result + data
 
     def handle_charref(self, name):
         self.result = "%s&#%s;" % (self.result, name)
-        
+
     def handle_entityref(self, name):
-        if self.entitydefs.has_key(name): 
+        if self.entitydefs.has_key(name):
             x = ';'
         else:
             # this breaks unstandard entities that end with ';'
             x = ''
         self.result = "%s&%s%s" % (self.result, name, x)
-    
+
     def unknown_starttag(self, tag, attrs):
         """ Delete all tags except for legal ones """
-        if tag in self.valid_tags:       
+        if tag in self.valid_tags:
             self.result = self.result + '<' + tag
             for k, v in attrs:
                 if string.lower(k[0:2]) != 'on' and \
                     string.lower(v[0:10]) != 'javascript':
                     self.result = '%s %s="%s"' % (self.result, k, v)
             endTag = '</%s>' % tag
-            self.endTagList.insert(0,endTag)    
+            self.endTagList.insert(0,endTag)
             self.result = self.result + '>'
-                
+
     def unknown_endtag(self, tag):
         if tag in self.valid_tags:
             try:
@@ -57,8 +57,8 @@ class StrippingParser(sgmllib.SGMLParser):
     def cleanup(self):
         """ Append missing closing tags """
         for j in range(len(self.endTagList)):
-                self.result = self.result + self.endTagList[j]    
-        
+                self.result = self.result + self.endTagList[j]
+
 
 def strip_tags(s, valid_tags=None):
     """Strip illegal HTML tags from string s"""
@@ -74,7 +74,7 @@ class TentaSearchParseError(ValueError):
 
 
 class TentaSearch(object):
-    
+
     def __init__(self, course):
             self.course = course
 
@@ -92,7 +92,7 @@ class TentaSearch(object):
             ('ord', none_chosen)
         ]
         return base_url + urlencode(args)
-    
+
 
     def get_data(self):
         handle = urlopen(self.get_url())
@@ -111,7 +111,7 @@ class TentaSearch(object):
                 start = i + 2
             elif l == '<td>Kurskod</td>\t<td></td>':
                 stop = i - 1
-        
+
         if start < 0 or stop < 0:
             raise TentaSearchParseError()
         for i in (start, stop):
@@ -119,7 +119,7 @@ class TentaSearch(object):
                 parse_lines[i]
             except IndexError:
                 raise TentaSearchParseError()
-        
+
         def despace(str, char=' '):
             str = str.replace(char * 2, char)
             if str.find(char * 2) != -1:
@@ -151,7 +151,7 @@ class tenta(Command):
         course = argument.strip()
         if len(course) < 4:
             return "Usage: .tenta <course>"
-        
+
         try:
             tenta_data = TentaSearch(course).get_data()
         except:
@@ -174,7 +174,7 @@ class tenta(Command):
             for (code, text) in codes.iteritems():
                 abbrev = abbrevs[code]
                 formatted.append("%s %s: %s" % (code, abbrev, ', '.join(text)))
-            
+
             formatted.sort()
             return ' | '.join(formatted).encode('utf-8')
         else:

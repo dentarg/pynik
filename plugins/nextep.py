@@ -33,14 +33,14 @@ class NextEpisodeCommand(Command):
 		info = self.fetch_tv_info(argument)
 		if "Show Name" not in info:
 			return "TV show not found | Manual search: " + (self.search_url % argument)
-		
+
 		# Name of TV series
 		name = info["Show Name"]
 
 		# Premiere year
 		if "Premiered" in info:
 			name += " (" + info["Premiered"] + ")"
-		
+
 		# Latest episode
 		if "Latest Episode" in info:
 			last_ep = info["Latest Episode"].replace("^", ", ")
@@ -54,13 +54,13 @@ class NextEpisodeCommand(Command):
 			next_ep = "Unknown"
 			if "Status" in info:
 				next_ep += " - " + info["Status"].replace("^", ", ")
-		
+
 		# Info URL
 		if "Show URL" in info:
 			url = info["Show URL"]
 		else:
 			url = self.search_url % argument
-		
+
 		# Compose result
 		return "%s | Latest: %s | Next: %s | Read more: %s" % (name, last_ep, next_ep, url)
-			
+

@@ -12,30 +12,30 @@ def menu(location):
 	if location == "[hg]" or location == "hg":
 		# Ryds Herrgård [hg], Linköping
 		url = "http://www.hg.se/?restaurang/kommande"
-		
+
 		entry_regex = '\<h2\>(.+?dag)en den .+?\<\/h2\>(.+?)(?=(\<h2\>|\<em\>))'
 		entry_day_index = 0
 		entry_data_index = 1
-		
+
 		dish_regex = '\<p\>(.+?)\<br\>(.+?((\d+?) kr))?'
 		dish_name_index = 0
 		dish_price_index = 3
-	
+
 	elif location == "villevalla" or location == "vvp":
 		# VilleValla Pub, Linköping
 		url = "http://www.villevallapub.se/"
-		
+
 		entry_regex = '\<td valign="top" style="padding-right: 2px;"\>\<strong\>(.+?dag)\<\/strong\>\<\/td\>\s*\<td\>(.+?)\<\/td\>'
 		entry_day_index = 0
 		entry_data_index = 1
-		
+
 		dish_regex = '\A(.+?) ((\d+?) :-)\Z'
 		dish_name_index = 0
 		dish_price_index = 2
-	
+
 	elif location == "karallen" or location == "kara":
 		# Restaurang Kårallen, LiU
-		
+
 		# Oh well... The Kårallen guys apparently don't know what they are doing.
 		# Until someone implements code that parses out the link to the current
 		# menu page, this hack will have to do:
@@ -45,36 +45,36 @@ def menu(location):
 			url += "v-13/"
 		else:
 			url += "v-15/"
-		
+
 		header_regex = '\<strong\>(.+?dag).+?\<\/strong\>'
-		
+
 		entry_regex = header_regex + '(\<\/p\>)?\<\/td\>\<\/tr\>(.+?)(?=(' + header_regex + '|\<p\>Pris dagens:))'
 		entry_day_index = 0
 		entry_data_index = 2
-		
+
 		dish_regex = '\<\/td\>\s+\<td\>(\s+\<p( align="[a-z]+")?\>)?([^\<]+?)(\<\/p\>)?\<\/td\>\<\/tr\>()'
 		dish_name_index = 2
 		dish_price_index = 4 # Dummy index.
-	
+
 	elif location == "blamesen" or location == "galaxen":
 		# Restaurang Blåmesen, Galaxen, LiU
-		
+
 		url = "http://davidg.nu/lunch/blamesen.php?price"
 		entry_regex = '([A-Za-zåäö]{3,4}dag)(.+?)(?=([A-Za-zåäö]{3,4}dag|$))'
 		entry_day_index = 0
 		entry_data_index = 1
-		
+
 		dish_regex = ': (.+?) \((\d+) kr\)'
-		
+
 		dish_name_index = 0
 		dish_price_index = 1
-		
+
 	elif location == "zenit":
 		# Restaurang & Café Zenit, LiU
 		url = "http://hors.se/new_site/restauranter_pdf.php?UID=24"
 
 		header_regex = '\<b\>(.+?dag) [\d]{2}-[A-Za-z]{3}\<\/b\>'
-		
+
 		entry_regex = header_regex + '(.+?)(?=(' + header_regex + '|\<td width="\d+px" valign="top"\>Veckans|\<\/html\>))'
 		entry_day_index = 0
 		entry_data_index = 1
@@ -82,12 +82,12 @@ def menu(location):
 		dish_regex = '\<td valign="top"\>([^\<]+)\<\/td\>\<td width="\d+px" valign="top"\>()'
 		dish_name_index = 0
 		dish_price_index = 1 # Dummy index.
-		
+
 	else:
 		return [] # Not implemented yet
-	
+
 	# Settings are correct, now it's time to actually do something.
-	
+
 	# Fetch the web page
 	response = utility.read_url(url)
 	if not response:
@@ -95,21 +95,21 @@ def menu(location):
 	data = response["data"]
 	data = utility.unescape(data.replace("\n", ""))
 	data = data.replace(utility.unescape("&nbsp;"), " ")
-	
+
 	#print data
-	
+
 	# Build the menu
 	menu = []
 	for entry in re.findall(entry_regex, data):
 		#print entry
 		day = entry[entry_day_index]
 		dishes = []
-		
+
 		for dish in re.findall(dish_regex, entry[entry_data_index]):
 			#print dish
 			dish_name = dish[dish_name_index].strip()
 			dish_name = re.sub('\s+', ' ', dish_name)
-			
+
 			if not dish_name:
 				pass # Odd input or bad regex
 			elif dish_name.find(">") != -1:
@@ -120,9 +120,9 @@ def menu(location):
 			else:
 				# No price, exclude it
 				dishes.append(dish_name)
-		
+
 		menu.append((day, dishes))
-	
+
 	# Done!
 	return menu
 
@@ -164,48 +164,48 @@ def liu_food_str(day):
 	zenit_menu = food("zenit", day)
 	blamesen_menu = food("blamesen", day)
 	result = ""
-	
+
 	if karallen_menu:
 		result += "Kårallen: "
-		
+
 		stripped_menu = []
-		
+
 		for item in karallen_menu[1]:
 			dish_string = item.split(" med ", 2)[0]
 			dish_string = dish_string.replace("serveras", "").strip().capitalize()
 			stripped_menu.append(dish_string)
-		
+
 		result += ", ".join(stripped_menu)
-	
+
 	if zenit_menu:
 		if result:
 			result += " | "
 		result += "Zenit: "
-		
+
 		stripped_menu = []
-		
+
 		for item in zenit_menu[1]:
 			dish_string = item.split(" med ", 2)[0]
 			dish_string = dish_string.replace("serveras", "").strip().capitalize()
 			dish_string = dish_string.decode('iso-8859-1').encode('utf-8')
 			stripped_menu.append(dish_string)
-		
+
 		result += ", ".join(stripped_menu)
-	
+
 	if blamesen_menu:
 		if result:
 			result += " | "
 		result += "Blåmesen: "
-		
+
 		stripped_menu = []
-		
+
 		for item in blamesen_menu[1]:
 			dish_string = item.split(" m ", 2)[0]
 			dish_string = re.sub(' \(\d\d kr\)', '', dish_string).strip().capitalize()
 			stripped_menu.append(dish_string)
-		
+
 		result += ", ".join(stripped_menu)
-	
+
 	if result:
 		return result
 	else:
@@ -216,14 +216,14 @@ class MatCommand(Command):
 
 	def __init__(self):
 		pass
-	
+
 	def trig_mat(self, bot, source, target, trigger, argument):
 		"""Hämtar dagens (eller en annan dags) meny från vald restaurangs hemsida."""
-		
+
 		# Split arguments
 		argument = argument.strip()
 		args = argument.split(' ', 2)
-		
+
 		# Determine location and day
 		if (not argument) or (len(args) > 2):
 			return "Prova med \".mat plats [dag]\" - de platser jag känner till är: " + \
@@ -234,7 +234,7 @@ class MatCommand(Command):
 		else:
 			day = args[1].lower()
 		location = utility.asciilize(args[0]).lower()
-		
+
 		# Do stuff
 		if location == "liu":
 			return liu_food_str(day)

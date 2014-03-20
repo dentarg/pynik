@@ -64,7 +64,7 @@ class IRCClient:
 	def log_line(self, line):
 		print line
 		self.lines.append(line)
-	
+
 	def send(self, line):
 		self.log_line(timestamp() + " SENT: " + line)
 
@@ -94,7 +94,7 @@ class IRCClient:
 
 			a = string[0:split]
 			b = string[split:]
-		
+
 			return self.tell(target, a) + self.tell(target, b)
 		else:
 			return self.send("PRIVMSG " + target + " :" + string)
@@ -123,7 +123,7 @@ class IRCClient:
 				prefix, nick = m[0:2]
 
 				self.temp_nick_list.append(nick)
-			
+
 	def on_end_nick_list(self, tupels):
 		self.nick_lists[self.temp_nick_list_channel] = self.temp_nick_list
 		self.temp_nick_list_channel = None

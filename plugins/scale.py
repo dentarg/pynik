@@ -8,7 +8,7 @@ from commands import Command
 class ScaleCommand(Command):
 	def __init_(self):
 		pass
-	
+
 	def trig_scale(self, bot, source, target, trigger, argument):
 		# Sanitize input
 		if not argument:
@@ -17,7 +17,7 @@ class ScaleCommand(Command):
 			argument = "overflow"
 		else:
 			argument = argument.strip()
-		
+
 		# Prepare
 		if argument.lower() == "beaufort": # Beaufort wind force scale
 			num_choices = 13
@@ -39,7 +39,7 @@ class ScaleCommand(Command):
 				str(score) + " - " + descriptions[score]
 			num_slots = num_choices
 			argument = "Beaufort"
-			
+
 		elif argument.lower() == "richter": # Richter magnitude scale
 			num_choices = 101
 			num_slots = 10
@@ -58,26 +58,26 @@ class ScaleCommand(Command):
 			print_score_fun = lambda score: \
 				str(score/10.0) + " - " + descriptions[score/10]
 			argument = "Richter"
-			
+
 		elif argument.lower() == "internet": # Rigged "Internet" scale
 			num_choices = 101
 			num_slots = 10
 			print_score_fun = lambda score: \
 				str(score + 9000) + "%"
 			argument = "Internet"
-			
+
 		else: # Normal percentage scale
 			num_choices = 101
 			num_slots = 10
 			print_score_fun = lambda score: \
 				str(score) + "%"
 			argument = '"' + argument + '"'
-		
+
 		score = random.choice(range(num_choices))
-		
+
 		# Build the answer
 		pos = score * num_slots / num_choices
 		scale = "[" + pos*"=" + ">" + (num_slots - 1 - pos)*"-" + "] " + \
 			print_score_fun(score)
-		
+
 		return "Your score on the " + argument + " scale is " + scale

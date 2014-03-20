@@ -15,7 +15,7 @@ class Game:
 		self.time = None
 		self.current_question = None
 		self.timeout_streak = 0
-		self.running = False 
+		self.running = False
 		self.words = ["fur", "nigeria", "chewing gum", "cigar", "gamecube", "flower", "mp3", "bottle", "film", "radio", "knob", "fuck", "temperature", "milk", "mouse", "man", "wax", "pillow", "bicycle", "pub", "telephone", "stalk", "dog", "cat", "blacksmith", "glass", "door", "house", "metal", "lighter", "window", "mechanic", "camera", "stapler", "pencil", "tape", "scissors"]
 
 	def set_dictionary(self, dictionary):
@@ -24,7 +24,7 @@ class Game:
 
 	def on_tick(self, bot, time):
 		self.time = time
-		
+
 		if self.running and (not self.timeout or time > self.timeout):
 			if self.timeout and time - self.timeout > datetime.timedelta(0, 0, 0, 0, 10): #if we're 10 minutes it's more than just lag...
 				self.running = False
@@ -74,9 +74,9 @@ class Game:
 			question = standard.WikipediaCommand.instance.wp_get(word)
 
 			if question:
-				question = re.sub("(?i)" + word, "*" * len(word), question)  
+				question = re.sub("(?i)" + word, "*" * len(word), question)
 				self.current_question = (question, word)
-		
+
 		if not self.current_question:
 			self.current_question = random.choice(self.dictionary.items())
 
@@ -106,7 +106,7 @@ class Game:
 		bot.tell(self.name, "Stopping inactive game.")
 
 class GamePlugin(Command):
-	hooks = ['on_privmsg']   
+	hooks = ['on_privmsg']
 
 	def __init__(self):
 		self.dictionary = { "*round time machine*": "clock", "*fourlegged reliever*": "chair", "*round rubber carrier*": "wheel", "*code machine*": "matricks", "*italian plumber*": "mario", "*squishy ball with gun*": "tee", "*round house kick master*": "chuck norris", "*best encoding*": "utf-8" }
@@ -114,7 +114,7 @@ class GamePlugin(Command):
 
 	def on_load(self):
 		self.load_games()
-	
+
 		for game in self.games.values():
 			game.set_dictionary(self.dictionary)
 
@@ -134,7 +134,7 @@ class GamePlugin(Command):
 		if not target in self.games.keys():
 			self.games[target] = Game(target)
 			self.games[target].set_dictionary(self.dictionary)
-	
+
 		game = self.games[target]
 		game.start(bot)
 
@@ -144,7 +144,7 @@ class GamePlugin(Command):
 			game.stop(bot)
 
 			self.on_save()
-	
+
 	def trig_gamehiscore(self, bot, source, target, trigger, argument):
 		if target in self.games.keys():
 			game = self.games[target]

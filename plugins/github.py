@@ -59,4 +59,4 @@ class GitHub(Command):
             return timepoints[days_diff]
         # round to weeks
         return '%d weeks ago' % ((days_diff+1)/7)
-        
+

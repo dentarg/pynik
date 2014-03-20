@@ -57,7 +57,7 @@ def read_http_data(s, length):
 			to_receive = min(length - len(data), 1024)
 
 		new_data = s.recv(to_receive)
-		
+
 		if new_data:
 			data += new_data
 		else:
@@ -73,19 +73,19 @@ def read_url(url):
 		if protocol == 'https':
 			# Use the built-in functions
 			import urllib
-			
+
 			try:
 				file = urllib.urlopen(url)
 			except IOError:
 				return None
-			
+
 			result = { "url": file.geturl(),
 						"data": file.read(1024*1024),
 						"info": file.info() }
-			
+
 			file.close()
 			return result
-				
+
 		elif protocol != 'http':
 			print "Only http(s) is supported at this moment."
 			return None
@@ -111,7 +111,7 @@ def read_url(url):
 
 			if response_num == 301 or response_num == 302:
 				s.close()
-				
+
 				# Let's do some simple loop detection...
 				if url == headers['Location']:
 					print "Redirect loop discovered at: %s" % headers['Location']

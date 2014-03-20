@@ -8,13 +8,13 @@ from commands import Command
 class PostNr(Command):
 	def __init__(self):
 		pass
-	
+
 	def posten_postnr_query(self, Address, Postort):
 		url = 'http://www.posten.se/soktjanst/postnummersok/resultat.jspv?gatunamn=' + utility.escape(Address) + '&po=' + utility.escape(Postort)
-	 
+
 		response = utility.read_url(url)
 		data = response["data"]
-	 
+
 		postnrs = {}
 		for line in data.split("\n"):
 			search = re.search('<TD class="firstcol">([^<]*)</TD><TD>([^<]*)</TD><TD>([^<]*)', line)
@@ -23,14 +23,14 @@ class PostNr(Command):
 					postnrs[search.group(3)] += " & " + search.group(1) + " " + search.group(2)
 				else:
 					postnrs[search.group(3)] = search.group(1) + " " + search.group(2)
-	 
+
 		result = ""
 		for postnr in postnrs.iterkeys():
 			if len(result) != 0:
 				result += ", "
 			result += "%s: %s" % (postnr, postnrs[postnr])
 			# print postnrs[postnr]
-	 
+
 		if len(result) == 0:
 			return "no result :<"
 		else:
@@ -60,11 +60,11 @@ class PostNr(Command):
 		else:
 			return self.posten_postnr_query(self.utf82iso(args[0]), self.utf82iso(args[1]))
 
-	def save(self): 
+	def save(self):
 		utility.save_data("postnr_addresses", self.places)
 
 	def on_load(self):
 		self.places = utility.load_data("postnr_addresses", {})
 
-	def on_unload(self): 
+	def on_unload(self):
 		self.places = {}

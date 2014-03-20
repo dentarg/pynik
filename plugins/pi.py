@@ -23,6 +23,6 @@ def control_pi(argument):
 class picomp(Command):
 	def __init__(self):
 		pass
-	
+
 	def trig_pi(self, bot, source, target, trigger, argument):
 		return control_pi(argument)

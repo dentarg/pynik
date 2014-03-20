@@ -34,7 +34,7 @@ class ReminderCommand(Command):
 			trigger_time = datetime.datetime(now.year, now.month, now.day, int(hour), int(minute))
 			if trigger_time < now:
 				trigger_time += datetime.timedelta(1)
-			
+
 			self.reminders.append(Reminder(source, trigger_time, message))
 
 			self.save()
@@ -79,6 +79,6 @@ class ReminderCommand(Command):
 
 	def on_load(self):
 		self.reminders = utility.load_data("reminders", [])
-	
+
 	def on_unload(self):
 		self.reminders = []

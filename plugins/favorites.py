@@ -14,25 +14,25 @@ class FavoriteCommands(Command):
 	def trig_delfav(self, bot, source, target, trigger, argument):
 		if utility.has_admin_privileges(source, target):
 			m = re.search('^([^\s]+)', argument)
-		
+
 			if m:
 				fav_trig = m.group(1)
 
 				if fav_trig in self.favorites:
 					del self.favorites[fav_trig]
-	
+
 					self.save()
 
 					return "Favorite %s deleted." % fav_trig
 
 	def trig_setfav(self, bot, source, target, trigger, argument):
 		m = re.search('^([^\s]+)\s+((ftp:\/\/|http:\/\/|https:\/\/)[^\s]+)$', argument)
-		
+
 		if m:
 			fav_trig, fav_url = m.group(1, 2)
-			
+
 			self.favorites[fav_trig] = fav_url
-	
+
 			self.save()
 
 			return "Favorite %s added." % fav_trig
@@ -53,7 +53,7 @@ class FavoriteCommands(Command):
 
 	def trig_fav(self, bot, source, target, trigger, argument):
 		m = re.search('(\S+) ?(.*)$', argument)
-		
+
 		if m:
 			fav_trig = m.group(1);
 			fav_args = m.group(2);
@@ -64,7 +64,7 @@ class FavoriteCommands(Command):
 				return fav
 			else:
 				return "No such favorite '%s'." % fav_trig
-	
+
 	def save(self):
 		utility.save_data("favorites", self.favorites)
 

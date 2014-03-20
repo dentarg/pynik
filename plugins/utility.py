@@ -15,13 +15,13 @@ class TimeoutException(Exception):
 
 def unescape(string):
 	"""Replaces all HTML entities and numeric references with the referenced characters.
-	
+
 	Since pynik is currently unaware of encodings, encoded non-ASCII characters may be
 	part of the input string. Also, code that calls this function does not expect Unicode
 	return values. Therefore Unicode is encoded into ASCII before returned, as an ugly
 	work-around. Encoding in for example UTF-8 would also be ugly since the input may
 	be in a different encoding, a garbled character soup would be the result."""
-	
+
 	def fromhtml(m):
 		text = m.group(0)
 		if text[1] == '#':
@@ -40,7 +40,7 @@ def unescape(string):
 		else:
 			# We can't tell what the user intention was here, leave it be.
 			return text
-	
+
 	return re.sub(r"&#?\w+;", fromhtml, string)
 
 def escape(str):
@@ -76,7 +76,7 @@ def asciilize(aaostr):
 			source = source[1:]
 
 	return to
-	
+
 def get_all_subclasses(c):
 	l = [c]
 	for subclass in c.__subclasses__():
@@ -86,7 +86,7 @@ def get_all_subclasses(c):
 def timeout(f, timeout = 1, args = (), kwargs = {}):
 	def handler(signum, frame):
 		raise TimeoutException
-    
+
 	old = signal.signal(signal.SIGALRM, handler)
 	signal.alarm(timeout)
 
@@ -111,13 +111,13 @@ def extract_nick(host):
 def read_url(url):
 	import httpget
 	import socket
-	
+
 	# THIS AFFECTS SOCKETS GLOBALLY AND SHOULD _NOT_ BE USED!!!
 	timeout_time = socket.getdefaulttimeout()
 	socket.setdefaulttimeout(15)
 
 	data = httpget.read_url(url)
-		
+
 	# THIS AFFECTS SOCKETS GLOBALLY AND SHOULD _NOT_ BE USED!!!
 	socket.setdefaulttimeout(timeout_time)
 
@@ -148,7 +148,7 @@ def currency_conversion(amount, source, target):
 	response = read_url(url)
 	data = response["data"]
 	data = data.replace(nbsp_utf8, "") # Get rid of UTF-8 NBSP
-	
+
 	m = re.search('\<b\>\d+(\.\d+)? [^=]+ = (\d+(\.\d+)?)[^\<]+\<\/b\>', data)
 	if m:
 		return float(m.group(2))

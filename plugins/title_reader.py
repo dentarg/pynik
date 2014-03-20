@@ -31,7 +31,7 @@ def get_title(url):
 	response = utility.read_url(url)
 	if response == None:
 		return None
-	
+
 	data = response["data"]
 	data = data.replace("\r", "").replace("\n", "")
 
@@ -111,17 +111,17 @@ class TitleReaderPlugin(Command):
 
 	def trig_title(self, bot, source, target, trigger, argument):
 		url = argument.strip()
-		
+
 		if not url:
 			if target not in self.urls.keys():
 				return 'I haven\'t seen any urls here yet.'
-			
+
 			url = self.urls[target].url
 			title = self.urls[target].title
-			
+
 		else:
 			title = get_title(argument)
-		
+
 		if not title:
 			return 'I can\'t find a title for ' + url
 		else:

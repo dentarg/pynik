@@ -65,8 +65,8 @@ class Environment:
 	def __repr__(self):
 		s = self.dictionary.__repr__()
 		if self.parent:
-			s += " %s" % self.parent 
-	
+			s += " %s" % self.parent
+
 		return s
 
 class True:
@@ -116,7 +116,7 @@ class Nil:
 	def rest(self):
 		return self
 
-			
+
 class Symbol:
 	def __init__(self, name):
 		self.name = name
@@ -188,7 +188,7 @@ class ExpressionBody:
 class Quoted:
 	def __init__(self, quoted_expression):
 		self.quoted_expression = quoted_expression
-	
+
 	def eval(self, env):
 		return self.quoted_expression
 
@@ -258,7 +258,7 @@ class ConsCell:
 		if isinstance(first, Symbol) and first.name in ["let", "let*"]:
 			bindings = rest.first()
 			code = ExpressionBody(rest.rest())
-			
+
 			child_env = Environment(env)
 
 			for binding in bindings:
@@ -279,7 +279,7 @@ class ConsCell:
 			return unsetq_func(env, rest.first())
 
 		#if isinstance(first, Symbol) and first.name == "if":
-		#	return 
+		#	return
 
 		return FunctionCall(first, rest).eval(env)
 
@@ -368,7 +368,7 @@ def make_list(expressions):
 		else:
 			prev.cdr = ConsCell(exp, Nil())
 			prev = prev.cdr
-	
+
 	return first
 
 class Macro:
@@ -415,7 +415,7 @@ class Lambda:
 
 	def __repr__(self):
 		return "<lambda function: %s, %s>" % (self.parameters, self.expression)
-	
+
 class NativeFunction:
 	def __init__(self, function, name, num_args):
 		self.function = function
@@ -464,7 +464,7 @@ def tokenize(text):
 	("dot", "(\.)"),
 	("symbol", "([^\"'\(\)\.\s]+)"), #("symbol", "([a-zA-Z<>=+\-*/][a-zA-Z0-9<>=+\-*/]*)"),
 	("INVALID", "(.+)")]
-	
+
 	pattern = "|".join([token_pattern for (_, token_pattern) in token_descriptions])
 
 	matches = re.findall(pattern, text)
@@ -487,7 +487,7 @@ def parse_list(token_stream):
 	parse_assert(token_stream.pop().name == "leftparenthesis", "missing ( when trying to parse list")
 
 	expressions = []
-	
+
 	while not token_stream.empty() and not token_stream.peek().name == "rightparenthesis":
 		exp = parse_expression(token_stream)
 
@@ -531,7 +531,7 @@ def parse_quoted(token_stream):
 	quoted = Quoted(exp)
 	for i in range(num_quotes - 1):
 		quoted = Quoted(quoted)
-	
+
 	return quoted
 
 def parse_dot(token_stream):
@@ -589,7 +589,7 @@ def unsetq_func(env, s):
 			return True()
 		else:
 			env = env.parent
-		
+
 	return Nil()
 
 def print_func(env, str):
@@ -603,7 +603,7 @@ def rand_func(env, i):
 
 def integer_eq_func(env, a, b):
 	eval_assert(isinstance(a, Integer) and isinstance(b, Integer), "arguments must be ints")
-	
+
 	if a.value == b.value:
 		return True()
 	else:
@@ -692,7 +692,7 @@ def lisp(env, text):
 
 	return expressions[0].eval(env)
 
-class LispCommand(Command): 
+class LispCommand(Command):
 	def __init__(self):
 		self.globals = Environment()
 		self.globals[Symbol("t")] = True()
@@ -747,14 +747,14 @@ class LispCommand(Command):
 
 	def on_load(self):
 		self.savable_environment = utility.load_data("lisp_state")
-		
+
 		if not self.savable_environment:
 			self.savable_environment = Environment(self.globals)
 		else:
 			self.savable_environment.parent = self.globals
 
-		
-	
+
+
 	def on_unload(self):
 		self.savable_environment = Environment(self.globals)
 

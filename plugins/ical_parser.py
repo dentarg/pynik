@@ -91,7 +91,7 @@ class Schema(Command):
 			url = self.id_directory[argument]
 			if isinstance(url, int):
 				url = "http://timeedit.liu.se/4DACTION/iCal_downloadReservations/timeedit.ics?branch=5&id1=%d&lang=1" % url
-			
+
 			response = utility.read_url(url)
 
 			parser = iCalParser()
@@ -106,7 +106,7 @@ class Schema(Command):
 					event_outputs.append(event.short_description())
 				else:
 					event_outputs.append(event.long_description())
-					
+
 				last_event = event
 
 			return "%s: %s" % (argument, " | ".join(event_outputs))
@@ -116,43 +116,43 @@ class Schema(Command):
 	def trig_addschemaid(self, bot, source, target, trigger, argument):
 		m_num = re.match('(\S+)\s+(\d+)', argument)
 		m_url = re.match('(\S+)\s+((https?:\/\/|www.)\S+)', argument)
-		
+
 		if m_num:
 			name, num = m_num.groups()
 			self.id_directory[name.lower()] = int(num)
 			self.save()
 			return "Added %s." % name.lower()
-			
+
 		elif m_url:
 			name = m_url.group(1)
 			url = m_url.group(2)
 			self.id_directory[name.lower()] = url
 			self.save()
 			return "Added %s." % name.lower()
-			
+
 		else:
 			return "Try .addschemaid <name> <url or timeedit id>"
 
 	def trig_addschemacourse(self, bot, source, target, trigger, argument):
 		argument = argument.replace(" ", "")
-		
+
 		if argument:
 			url = "http://timeedit.liu.se/4DACTION/WebShowSearch/5/2-0?wv_type=6&wv_search=" + argument
 			#print url
 			response = utility.read_url(url)
 			data = response["data"].replace("\n", "")
 			#print data
-			
+
 			m = re.search('\<a href=\'javascript:addObject\((\d+)\)\'\>\<img src=\'\/img\/plus\.gif\' width=\'12\' height=\'12\' border=\'0\' alt=\'\'\>\<\/a\>', data)
-			
+
 			if not m:
 				return "Course not found :("
-			
+
 			#print m.group(1)
 			self.id_directory[argument.lower()] = int(m.group(1))
 			self.save()
 			return "Added %s: http://timeedit.liu.se/4DACTION/WebShowSearch/5/2-0?wv_obj1=%s&wv_graphic=Grafiskt+format If this is wrong, just re-add it." % (argument.lower(), m.group(1))
-			
+
 		else:
 			return "Try .addschemacourse <course code>"
 

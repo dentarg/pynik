@@ -18,12 +18,12 @@ def icq_lookup(icqid):
 			info = re.sub("\n|\r\n|\n\n",", ",info)
 		city = m.group(3)
 		country = m.group(4)
-		
+
 		if nick:
 			result = nick
 		if info or city or country:
 			result = result + ": "
-			
+
 		if info:
 			result = result + info
 		if city:
@@ -33,16 +33,16 @@ def icq_lookup(icqid):
 		return result
 	else:
 		return None
-				
+
 class icq(Command):
-	
+
 	def trig_icq(self, bot, source, target, trigger, argument):
-		
+
 		result = icq_lookup(argument)
 
 		if result == None:
 			return "No result returned."
 
 		fixedline = re.sub("\s+"," ", result)
-		
+
 		return fixedline

@@ -78,7 +78,7 @@ class RssCommand(Command):
 		self.reader.parse(data)
 
 		articles = self.reader.get_articles()
-	
+
 		if articles:
 			return 'Newest: ' + ' | '.join(map(lambda x: "%s - %s" % (x[1], x[2]), articles[0:3]))
 		else:
@@ -115,7 +115,7 @@ class RssCommand(Command):
 			else:
 				urls = map(lambda x: x[1], filter(lambda x: x[0] == source, self.watch_list))
 				return 'These feeds are in your watch list: %s.' % (', '.join(urls))
-			
+
 		else:
 			return 'Usage delwatch <rss feed>.'
 
@@ -127,7 +127,7 @@ class RssCommand(Command):
 
 			for t in self.watch_list:
 				nick, url, newest = t
-				
+
 				try:
 					response = utility.timeout(utility.read_url, 10, [url])
 					if not response:
@@ -164,6 +164,6 @@ class RssCommand(Command):
 
 	def on_load(self):
 		self.watch_list = utility.load_data("rss_watch_list", [])
-	
+
 	def on_unload(self):
 		self.watch_list = []

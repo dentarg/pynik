@@ -48,7 +48,7 @@ def handle_request(request):
 	web_server.respond_200(request, data)
 
 #web_server.register_handle_request_callback(handle_request)
-	
+
 #bot.add_timer(datetime.timedelta(0, 60), True, bot.send, "PRIVMSG #botnik :this is to keep me alive :O")
 
 while True:

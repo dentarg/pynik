@@ -7,7 +7,7 @@ from json import JSONDecoder
 
 class IMDbCommand(Command):
 	usage = "Usage: .imdb <search term>"
-	
+
 	def __init__(self):
 		pass
 
@@ -26,7 +26,7 @@ class IMDbCommand(Command):
 			data = decoder.decode(response['data'])
 		except Exception:
 			return u"Couldn't parse the API output :( | Manual search: " + site_search_url
-		
+
 		if data.get(u"Response") != u"True":
 			return u"No results found! Maybe you should try searching manually: " + \
 					site_search_url
@@ -40,16 +40,16 @@ class IMDbCommand(Command):
 					u"genre": data.get(u"Genre", u"Unknown"),
 					u"id": data.get(u"ID", u"tt0107838"),
 					u"site_search_url": site_search_url}
-		
+
 	def trig_imdb(self, bot, source, target, trigger, argument):
 		"""Command that queries IMDb - The Internet Movie Database."""
-		
+
 		argument = argument.strip()
-		
+
 		# Show usage
 		if not argument:
 			return "IMDb - The Internet Movie Database. " + self.usage
-				
+
 		# Query API
 		else:
 			return self.query(argument).encode("utf-8")

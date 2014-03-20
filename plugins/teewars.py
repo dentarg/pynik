@@ -6,8 +6,8 @@ import time
 import re
 from socket import *
 
-from socket import * 
-from struct import * 
+from socket import *
+from struct import *
 import datetime
 import utility
 import thread
@@ -17,18 +17,18 @@ import traceback
 list_lock = thread.allocate_lock()
 
 def tw_get_num_players(address, port):
-	sock = socket(AF_INET, SOCK_DGRAM) 
-	sock.settimeout(5.0); 
-	sock.sendto("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xffgief", (address, port)) 
-	data, addr = sock.recvfrom(1024) 
-	sock.close() 
- 
-	data = data[14:] 
- 
+	sock = socket(AF_INET, SOCK_DGRAM)
+	sock.settimeout(5.0);
+	sock.sendto("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xffgief", (address, port))
+	data, addr = sock.recvfrom(1024)
+	sock.close()
+
+	data = data[14:]
+
 	slots = data.split("\x00")
 	server_info = slots[0:8]
 	server_name, map_name = slots[1:3]
-	data = data[-2:] 
+	data = data[-2:]
 	num_players, max_players = map(int, slots[6:8])
 
 	return num_players, max_players
@@ -44,27 +44,27 @@ def tw_get_num_players_proxy(address, port, players_dic):
 		with list_lock:
 			players_dic[thread.get_ident()] = -1
 
-def tw_get_info(): 
+def tw_get_info():
 	counter = 0
-	address = "master.teewars.com" 
+	address = "master.teewars.com"
 	master_port = 8300
- 
-	sock = socket(AF_INET, SOCK_DGRAM) 
-	sock.settimeout(5.0) 
-	sock.sendto("\x20\x00\x00\x00\x00\x00\xff\xff\xff\xffreqt", (address, master_port)) 
- 
+
+	sock = socket(AF_INET, SOCK_DGRAM)
+	sock.settimeout(5.0)
+	sock.sendto("\x20\x00\x00\x00\x00\x00\xff\xff\xff\xffreqt", (address, master_port))
+
 	try:
-		data, addr = sock.recvfrom(1024) 
-		sock.close() 
-		data = data[14:] 
-		num_servers = len(data) / 6 
-		num_players = 0 
+		data, addr = sock.recvfrom(1024)
+		sock.close()
+		data = data[14:]
+		num_servers = len(data) / 6
+		num_players = 0
 
 		players_dic = {}
 
-		for n in range(0, num_servers): 
-			ip = ".".join(map(str, map(ord, data[n*6:n*6+4]))) 
-			port = ord(data[n*6+5]) * 256 + ord(data[n*6+4]) 
+		for n in range(0, num_servers):
+			ip = ".".join(map(str, map(ord, data[n*6:n*6+4])))
+			port = ord(data[n*6+5]) * 256 + ord(data[n*6+4])
 
 			#print ip, port
 
@@ -96,7 +96,7 @@ def tw_get_info():
 
 		with open("data/tw_stats.txt", "a") as file:
 			file.write("%s %s %s\n" % (int(time.time()), num_servers, num_players))
-			 
+
 		utility.read_url("http://serp.starkast.net/berserker/gief_stats.php?timestamp=%s&servers=%s&players=%s" % (int(time.time()), num_servers, num_players));
 		return (num_servers, num_players)
 	except:
@@ -107,7 +107,7 @@ class TeewarsCommand(Command):
 	def __init__(self):
 		self.next_beat = None
 		self.cached_info = None
-	
+
 	def trig_twinfo(self, bot, source, target, trigger, argument):
 		self.cached_info = tw_get_info()
 		if self.cached_info:

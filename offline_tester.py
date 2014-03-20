@@ -18,7 +18,7 @@ class OfflineTester:
 				pass
 			except:
 				print "argh", plugin, sys.exc_info(), traceback.extract_tb(sys.exc_info()[2])
-	
+
 	def on_privmsg(self, nick, target, message):
 		self.execute_plugins("on_privmsg", nick, target, message)
 
@@ -26,7 +26,7 @@ class OfflineTester:
 		plugin_handler.plugins_on_unload()
 		plugin_handler.reload_plugin_modules()
 		plugin_handler.plugins_on_load()
-	
+
 	def load_plugin(self, plugin):
 		plugin_handler.load_plugin(plugin)
 

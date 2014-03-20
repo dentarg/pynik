@@ -17,7 +17,7 @@ for module in sys.modules.values():
 	if module not in prev:
 		if module.__name__ == 'plugins':
 			plugins_module = module
-		
+
 		if module.__name__ == 'plugins.plugins':
 			new_modules.insert(0, module)
 		elif module.__name__ == 'plugins.commands':
@@ -43,7 +43,7 @@ def search_for_subclasses(c):
 	for subclass in c.__subclasses__():
 		l.extend(search_for_subclasses(subclass))
 	return l
-	
+
 def get_plugins_by_hook(hook):
 	result = []
 	for plugin in search_for_subclasses(plugins.Plugin):
@@ -73,7 +73,7 @@ def load_plugin(plugin):
 		file.close()
 
 def plugins_on_load():
-	l = search_for_subclasses(plugins.Plugin) 
+	l = search_for_subclasses(plugins.Plugin)
 
 	for plugin in l:
 		plugin.instance = plugin()
@@ -82,7 +82,7 @@ def plugins_on_load():
 		plugin.instance.on_load()
 
 def plugins_on_unload():
-	l = search_for_subclasses(plugins.Plugin) 
+	l = search_for_subclasses(plugins.Plugin)
 
 	for plugin in l:
 		plugin.instance.on_unload()

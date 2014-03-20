@@ -9,7 +9,7 @@ class TVCommand(Command):
 		m = re.search('(<div class="kanalRubrik">' + channel_name + '.*?<\/div><\/div>)', contents)
 		if m:
 			contents = m.group(1)
-			
+
 			m = re.search('<div class="kanalRubrik">' + channel_name + '<\/div>.*?<img src="img\/.*?_orange.gif" alt="" title="(.*?)"\/><\/div> (.*?) <a href="#" class="prgm_orange"', contents)
 			if m:
 				show_name = m.group(1)
@@ -34,14 +34,14 @@ class TVCommand(Command):
 
 				return s
 		return None
-	
+
 	def trig_tv(self, bot, source, target, trigger, argument):
 		response = utility.read_url("http://www.tv.nu/")
 		data = response["data"]
 
 		if len(argument):
 			channel = argument
-			
+
 			s = self.extract_channel_info(data, channel)
 			if s:
 				return "Currently on %s: %s." % (channel, s)

@@ -22,7 +22,7 @@ class YrNo(Command):
 
         # Ugly hack FIXME
         import signal
-        signal.alarm(20)                
+        signal.alarm(20)
 
         if not argument:
             if source in self.places:
@@ -59,10 +59,10 @@ class YrNo(Command):
                 #print response.geturl()
             else:
                 return "Could not find any such place. Maybe you should move?"
-        
+
         # Parse overview page
         stedbaseurl = response.geturl()
-        
+
         # Get Hour by Hour view
         url = stedbaseurl + "hour_by_hour.html"
         print "contacting", url
@@ -75,7 +75,7 @@ class YrNo(Command):
             town = urllib2.unquote(search.group(1))
         else:
             town = "unknown"
-     
+
         data = response.read()
         ofset = 0
         hbh = {}
@@ -155,18 +155,18 @@ class YrNo(Command):
         except IOError:
             pass
 
-    def on_load(self): 
+    def on_load(self):
         self.places = {}
-        
+
         try:
-            f = open(os.path.join("data", "yrno.txt"), "r") 
+            f = open(os.path.join("data", "yrno.txt"), "r")
             unpickler = pickle.Unpickler(f)
             self.places = unpickler.load()
             f.close()
         except:
             pass
-        
-    def on_unload(self): 
+
+    def on_unload(self):
         self.places = {}
 
 #print YrNo().trig_yr(None, None, None, None, "Hjaltevad", None)

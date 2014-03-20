@@ -9,6 +9,6 @@ from plugins import Plugin
 from commands import Command
 import command_catcher
 
-class AdunoCommand(Command): 
+class AdunoCommand(Command):
 	def trig_aduno(self, bot, source, target, trigger, argument):
 		return "¯\(o_º)/¯"

@@ -8,8 +8,8 @@ import commands
 import utility
 import traceback
 
-class CommandCatcherPlugin(Plugin): 
-	hooks = ['on_privmsg']   
+class CommandCatcherPlugin(Plugin):
+	hooks = ['on_privmsg']
 
 	def __init__(self):
 		pass
@@ -17,11 +17,11 @@ class CommandCatcherPlugin(Plugin):
 	def on_command(self, bot, source, target, trigger, arguments):
 		if source == "buffi":
 			return
-			
+
 		meth_name = 'trig_' + trigger.lower()
-		
+
 		pairs = []
-		
+
 		for command_class in commands.Command.__subclasses__():
 			import __builtin__
 			meth = None
@@ -30,7 +30,7 @@ class CommandCatcherPlugin(Plugin):
 				pairs.append([command_class.instance, meth])
 			except:
 				pass
-				
+
 		for command in commands.get_commands_by_trigger(trigger):
 			pairs.append([command, command.on_trigger])
 
@@ -63,7 +63,7 @@ class CommandCatcherPlugin(Plugin):
 		if not len(pairs):
 			if trigger in favorites.FavoriteCommands.instance.favorites.keys():
 				return favorites.FavoriteCommands.instance.trig_fav(bot, source, target, 'fav', trigger + ' ' + arguments)
-	
+
 	def on_privmsg(self, bot, source, target, message):
 		m = re.match(r'^(\S)((\S+)\s?(.*?))$', message)
 		if m and m.group(1) == '.':
@@ -81,12 +81,12 @@ class CommandCatcherPlugin(Plugin):
 				if m:
 					if target == source:
 						target = m.group(1)
-				
+
 				bot.tell(target, ret_str)
 
 
 	def on_load(self):
 		pass
-		
+
 	def on_unload(self):
 		pass

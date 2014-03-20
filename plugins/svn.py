@@ -14,11 +14,11 @@ class SvnCommand(Command):
 	def trig_svn(self, bot, source, target, trigger, argument):
 		result = ""
 		url = argument.strip()
-		
+
 		if not len(url):
 			url = 'http://stalverk80.se/svn/pynik'
 			result = "No argument given, result for my own repository: ";
-		
+
 		# Execute 'svn info' in anonymous, non-interactive mode
 		command = [
 			'svn',
@@ -34,23 +34,23 @@ class SvnCommand(Command):
 				stderr=subprocess.PIPE,
 				close_fds=True,
 				env={"LANGUAGE": "en_US:en"})
-	
+
 		m = re.search(
 				"Last Changed Author:\s+(.+)\nLast Changed Rev:\s+(.+)\nLast Changed Date:\s+(.+)",
 				 p.stdout.read())
-		
+
 		if m:
 			# Seems like we have parseable data
 			last_author, last_rev, last_date = m.group(1, 2, 3)
 			m = re.search('^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})', last_date)
-			
+
 			if m:
 				# Result found, prepare and return
 				args = map(int, m.groups())
 				d = datetime.datetime(*args)
 				result += url + " - Last revision was %s by %s at %s." % (last_rev, last_author, d)
 				return result
-	
+
 		# Hrm, no result found, let's try to find out why
 		error = p.stderr.read()
 		if re.search('Connection refused', error) or \
@@ -67,5 +67,5 @@ class SvnCommand(Command):
 				result += "Oops, the server replied \"" + m.group(1) + "\" :O"
 			else:
 				result += "Could not retrieve that information for some reason :S"
-		
+
 		return result

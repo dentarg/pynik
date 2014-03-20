@@ -7,24 +7,24 @@ import re
 import utility
 import random
 
-class EchoCommand(Command): 
+class EchoCommand(Command):
 	def __init__(self):
 		pass
-	
+
 	def trig_echo(self, bot, source, target, trigger, argument):
 		return argument
 
-class HelloCommand(Command): 
+class HelloCommand(Command):
 	def __init__(self):
 		pass
-	
+
 	def trig_hello(self, bot, source, target, trigger, argument):
 		return "Hello there, %s!" % source
 
-class PickCommand(Command): 
+class PickCommand(Command):
 	def __init__(self):
 		pass
-	
+
 	def trig_pick(self, bot, source, target, trigger, argument):
 		choices = argument.split(" or ")
 		choices = map(lambda x: x.strip(), choices)
@@ -36,46 +36,46 @@ class PickCommand(Command):
 			responses = ["Hm... Definitely not %s.", "%s!", "I say... %s!", "I wouldn't pick %s...", "Perhaps %s..."]
 			choice = random.choice(choices)
 			response = random.choice(responses)
-			
+
 			return response % choice
 		else:
 			return None
 
-class InsultCommand(Command): 
-	def __init__(self): 
-		pass 
+class InsultCommand(Command):
+	def __init__(self):
+		pass
 
-	def trig_insult(self, bot, source, target, trigger, argument): 
+	def trig_insult(self, bot, source, target, trigger, argument):
 		if source == "Iradieh":
 			return None
-		
+
 		t = argument.strip()
 		if not t:
 			t = source
-		
+
 		insult = random.sample(self.insults, 1)[0]
 		try:
 			return insult.replace('%s', t)
-			
+
 		except:
 			return "We all know %s sucks, but so does the insult I tried to use." % t
 
-	def trig_addinsult(self, bot, source, target, trigger, argument): 
-		if not "%s" in argument: 
-			return "Trying to add an improper insult, booo!" 
-		elif argument in self.insults: 
-			return "That insult already exists!" 
-		self.insults.append(argument) 
-		self.save() 
+	def trig_addinsult(self, bot, source, target, trigger, argument):
+		if not "%s" in argument:
+			return "Trying to add an improper insult, booo!"
+		elif argument in self.insults:
+			return "That insult already exists!"
+		self.insults.append(argument)
+		self.save()
 		return "Added insult: %s" % argument.replace('%s', source)
-	 
-	def save(self): 
+
+	def save(self):
 		utility.save_data("insults", self.insults)
-	 
-	def on_load(self): 
+
+	def on_load(self):
 		self.insults = utility.load_data("insults", [])
-		 
-	def on_unload(self): 
+
+	def on_unload(self):
 		self.insults = None
 
 class RawCommand(Command):
@@ -118,7 +118,7 @@ class CommandsCommand(Command):
 			for trigger in l:
 				if trigger not in triggers:
 					triggers.append(trigger)
-		
+
 		return "Commands: %s" % ", ".join(sorted(triggers))
 
 class HelpCommand(Command):
@@ -132,7 +132,7 @@ class HelpCommand(Command):
 				f = command.__dict__[fname]
 				if f.__doc__:
 					return "%s: %s" % (argument, f.__doc__)
-		
+
 		if trigger_found:
 			return "I can offer nothing."
 		else:
@@ -183,13 +183,13 @@ class TempCommand(Command):
 		else:
 			return "Temperature in %s: invalid place, try using .yr instead." % (argument_text)
 
-	def save(self): 
+	def save(self):
 		utility.save_data("places", self.places)
 
 	def on_load(self):
 		self.places = utility.load_data("places", {})
 
-	def on_unload(self): 
+	def on_unload(self):
 		self.places = {}
 
 class GoogleCommand(Command):
@@ -209,9 +209,9 @@ class GoogleCommand(Command):
 		m = re.search(r'Video results for <em>.*?<\/em>.*?<td valign=top style="padding-right:10px"><a href="(.*?)" class=l.*?>(.*?)</a><br>',data)
 		if m:
 			text = utility.unescape(m.group(2))
-			text = re.sub('<.+?>', '', text) 
+			text = re.sub('<.+?>', '', text)
 			link = m.group(1)
-			return "%s - %s | %s" % (text, link, url) 
+			return "%s - %s | %s" % (text, link, url)
 
 		# try to extract calculator result
 		#m = re.search('<td><img src="\/images\/icons\/onebox\/calculator-40\.gif" ?width=40 height=40 alt=""><td>&nbsp;<td style="vertical-align:top" >(<h2 class=r( style="font-size:\d+%")?>)?<b>(.*?)<\/b>', data)
@@ -248,9 +248,9 @@ class GoogleCommand(Command):
 			location = re.sub('<.+?>', '', location)
 
 			return "Time in %s: %s (%s)" % (location, time, timezone)
-			
-		
-		
+
+
+
 		# try to extract first hit
 		m = re.search('<li class=g><h3 class=r><a href="(.*?)".*?>(.*?)<\/a>(.*?)</div>', data)
 		if m:
@@ -274,7 +274,7 @@ class WikipediaCommand(Command):
 
 		data = response["data"]
 		url = response["url"]
-		
+
 		# sometimes there is a nasty table containing the first <p>. we can't allow this to happen!
 		pattern = re.compile("<table.*?>.+?<\/table>", re.MULTILINE)
 
@@ -309,7 +309,7 @@ class WikipediaCommand(Command):
 			url, data = self.wp_get(language, argument)
 			if data:
 				return "%s - %s" % (data, url)
-	
+
 		return "I couldn't find an article... :("
 
 class AAOCommand(Command):
@@ -322,7 +322,7 @@ class AAOCommand(Command):
 				return source+": Du använder nog ISO-646"
 			else:
 				return source+": Du använder nog UTF-8"
-			
+
 class CollectCommand(Command):
 	def trig_collect(self, bot, source, target, trigger, argument):
 		import gc

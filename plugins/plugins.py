@@ -24,7 +24,7 @@ class Plugin(object):
 
 	def on_nick_changed(self, bot, old_nick, new_nick):
 		pass
-		
+
 	def on_notice(self, bot, source, target, message):
 		pass
 
@@ -33,7 +33,7 @@ class Plugin(object):
 
 	def on_privmsg(self, bot, source, target, message):
 		pass
-		
+
 	def on_quit(self, bot, nick, reason):
 		pass
 

@@ -136,7 +136,7 @@ class SpotifyCommand(Command):
 			ref = self.references[target]
 			if ref:
 				res = u" | ".join([self.lookup_direct(ref), ref.URL()])
-		
+
 		if res:
 			return res.encode("utf-8")
 		else:

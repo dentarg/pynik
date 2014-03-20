@@ -37,14 +37,14 @@ def google_divisor(int1, int2):
 	else:
 		divisor = 1
 		unit = ''
-	return (divisor, unit) 
+	return (divisor, unit)
 
 
-					
+
 class Googlefight(Command):
 	def __init__(self):
 		pass
-	
+
 	def trig_googlefight(self, bot, source, target, trigger, argument):
 		args = argument.split('|', 2)
 		if len(args) == 2 and len(args[0]) > 0 and len(args[1]) > 0:
