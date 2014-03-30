@@ -21,6 +21,18 @@ Configure your bot with environment variables:
 If put the environment variables in a file named `.env`, you can use [Honcho]
 to start the bot.
 
+Example of a `.env` file:
+
+```sh
+SERVER="irc.example.com"
+SERVER_PORT="6667"
+NICK="botnik"
+USERNAME="botnik"
+REALNAME="Freeze? I'm a robot. I'm not a refrigerator."
+ADMINS="dentarg, serp"
+CHANNELS="#foo, #bar"
+```
+
 Install Honcho if you don't have it
 
     pip install honcho
