@@ -7,3 +7,4 @@ username       = os.environ['USERNAME']
 realname       = os.environ['REALNAME']
 admins         = os.environ['ADMINS'].split(',')
 channels       = os.environ['CHANNELS'].split(',')
+title_channels = os.environ['TITLE_CHANNELS'].split(',')

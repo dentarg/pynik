@@ -17,6 +17,7 @@ Configure your bot with environment variables:
 | REALNAME               | Real name of the bot.                             |
 | ADMINS                 | Nicknames with bot admin privileges.              |
 | CHANNELS               | Channels the bot should join on start.            |
+| TITLE_CHANNELS         | Print the `<title>` of URLs in these channels.    |
 
 If put the environment variables in a file named `.env`, you can use [Honcho]
 to start the bot.
@@ -30,7 +31,8 @@ NICK="botnik"
 USERNAME="botnik"
 REALNAME="Freeze? I'm a robot. I'm not a refrigerator."
 ADMINS="dentarg, serp"
-CHANNELS="#foo, #bar"
+CHANNELS="#foo, #bar, #baz"
+TITLE_CHANNELS="#foo, #bar"
 ```
 
 Install Honcho if you don't have it

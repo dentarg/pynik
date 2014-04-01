@@ -4,6 +4,7 @@ import sys
 import re
 import utility
 import tweet
+import settings
 from plugins import Plugin
 from commands import Command
 import command_catcher
@@ -70,7 +71,7 @@ class TitleReaderPlugin(Command):
 				title = utility.timeout(get_title, 10, (url,))
 				self.urls[target].title = title
 				self.save_last_url(target)
-				if not tweetbool and target in ['#c++.se', '#d1d', '#lithen', "#d2006", "#d2005a", "#uppetid", "#starkast", "#testchannel"]:
+				if not tweetbool and target in settings.title_channels:
 					bot.tell(target, self.clean(url, title))
 			except utility.TimeoutException:
 				pass
