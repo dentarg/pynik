@@ -19,7 +19,7 @@ Configure your bot with environment variables:
 | CHANNELS               | Channels the bot should join on start.            |
 | TITLE_CHANNELS         | Print the `<title>` of URLs in these channels.    |
 
-If put the environment variables in a file named `.env`, you can use [Honcho]
+If you put the environment variables in a file named `.env`, you can use [Honcho]
 to start the bot.
 
 Example of a `.env` file:
