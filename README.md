@@ -6,7 +6,7 @@ A Python IRC bot.
 
 ## Environment variables
 
-Configure your bot with environment variables:
+Configure your bot with the following environment variables:
 
 | Environment variable   | Description                                       |
 |------------------------|---------------------------------------------------|
@@ -18,6 +18,14 @@ Configure your bot with environment variables:
 | ADMINS                 | Nicknames with bot admin privileges.              |
 | CHANNELS               | Channels the bot should join on start.            |
 | TITLE_CHANNELS         | Print the `<title>` of URLs in these channels.    |
+| twitter_consumer_key         | Twitter API key.                            |
+| twitter_consumer_secret      | Twitter API secret.                         |
+| twitter_access_token_key     |                                             |
+| twitter_access_token_secret  |                                             |
+
+Twitter API keys are required by [tweet.py](plugins/tweet.py). See [dev.twitter.com] for more info.
+
+[dev.twitter.com]: https://dev.twitter.com/docs/auth/tokens-devtwittercom
 
 If you put the environment variables in a file named `.env`, you can use [Honcho]
 to start the bot.
@@ -33,9 +41,20 @@ REALNAME="Freeze? I'm a robot. I'm not a refrigerator."
 ADMINS="dentarg, serp"
 CHANNELS="#foo, #bar, #baz"
 TITLE_CHANNELS="#foo, #bar"
+
+twitter_consumer_key=xxx
+twitter_consumer_secret=xxx
+twitter_access_token_key=xxx
+twitter_access_token_secret=xxx
 ```
 
-Install Honcho if you don't have it
+## Development
+
+[python-twitter](https://github.com/bear/python-twitter) is a dependency, install it with
+
+    pip install python-twitter
+
+Install [Honcho] if you don't have it
 
     pip install honcho
 

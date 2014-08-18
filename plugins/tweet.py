@@ -2,6 +2,8 @@
 import re
 import sys
 import utility
+import twitter
+import settings
 from json import JSONDecoder
 from commands import Command
 
@@ -24,24 +26,15 @@ def match_tweet_url(url):
 	return m
 
 def get_tweet_text_and_user(tweet):
-	decoder = JSONDecoder()
-	url = "https://api.twitter.com/1/statuses/show/" + tweet.idno + ".json"
-	response = utility.read_url(url)
+	api = twitter.Api(consumer_key=settings.twitter_consumer_key,
+		consumer_secret=settings.twitter_consumer_secret,
+		access_token_key=settings.twitter_access_token_key,
+		access_token_secret=settings.twitter_access_token_secret)
 
-	if not response:
-		# Couldn't connect to Twitter API
-		return False
+	status = api.GetStatus(tweet.idno)
 
-	try:
-		data = decoder.decode(response['data'])
-	except Exception:
-		# Couldn't parse the API output
-		print("Couldn't parse the API output")
-		return False
-
-	# Use latin-1 to make IRCClient.send() happy
-	tweet.text = data.get(u"text").encode('latin-1', 'replace').replace('\n', ' ')
-	tweet.user = data.get(u"user").get(u"screen_name").encode('latin-1', 'replace')
+	tweet.text = status.text
+	tweet.user = status.user.screen_name
 	return tweet
 
 def get_tweet(message):
