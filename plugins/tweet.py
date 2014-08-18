@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 import sys
-import utility
 import twitter
 import settings
 from json import JSONDecoder
