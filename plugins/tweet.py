@@ -33,8 +33,9 @@ def get_tweet_text_and_user(tweet):
 
 	status = api.GetStatus(tweet.idno)
 
-	tweet.text = status.text
-	tweet.user = status.user.screen_name
+	# Use latin-1 to make IRCClient.send() happy
+	tweet.text = status.text.encode('latin-1', 'replace')
+	tweet.user = status.user.screen_name.encode('latin-1', 'replace')
 	return tweet
 
 def get_tweet(message):
