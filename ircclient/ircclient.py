@@ -66,6 +66,7 @@ class IRCClient:
 		self.lines.append(line)
 
 	def send(self, line):
+		line = line.replace('\n', ' ').replace('\r', '')
 		self.log_line(timestamp() + " SENT: " + line)
 
 		data = line + "\r\n"
