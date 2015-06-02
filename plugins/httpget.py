@@ -1,5 +1,6 @@
 import sys
 import re
+import urllib
 from socket import *
 
 def write(s, text):
@@ -65,6 +66,9 @@ def read_http_data(s, length):
 
 	return data
 
+class AppURLopener(urllib.FancyURLopener):
+	version = "Pynik/0.1"
+
 def read_url(url):
 	m = re.match("^(.{3,5}):\/\/([^\/]*)(:?\d*)(\/.*?)?$", url)
 	if m:
@@ -72,9 +76,9 @@ def read_url(url):
 
 		if protocol == 'https':
 			# Use the built-in functions
-			import urllib
 
 			try:
+				urllib._urlopener = AppURLopener()
 				file = urllib.urlopen(url)
 			except IOError:
 				return None
