@@ -41,6 +41,12 @@ def get_tweet_text_and_user(tweet):
 	# Use latin-1 to make IRCClient.send() happy
 	tweet.text = status.text.encode('latin-1', 'replace')
 	tweet.screen_name = status.user.screen_name.encode('latin-1', 'replace')
+
+	for url in status.urls:
+		latin_url = url.url.encode('latin-1', 'replace')
+		latin_expanded_url = url.expanded_url.encode('latin-1', 'replace')
+		tweet.text = tweet.text.replace(latin_url, latin_expanded_url)
+
 	return tweet
 
 def get_user_description(tweet):
