@@ -4,45 +4,25 @@ from __future__ import with_statement
 import pickle
 import sys
 from plugins import Plugin
-import htmlentitydefs
+from HTMLParser import HTMLParser
 import re
 import os
 import signal
 import string
 import settings
+import requests
 
 class TimeoutException(Exception):
 	pass
 
 def unescape(string):
-	"""Replaces all HTML entities and numeric references with the referenced characters.
+	unescaped_string = HTMLParser().unescape(string)
+	unescaped_string_type = type(unescaped_string)
 
-	Since pynik is currently unaware of encodings, encoded non-ASCII characters may be
-	part of the input string. Also, code that calls this function does not expect Unicode
-	return values. Therefore Unicode is encoded into ASCII before returned, as an ugly
-	work-around. Encoding in for example UTF-8 would also be ugly since the input may
-	be in a different encoding, a garbled character soup would be the result."""
-
-	def fromhtml(m):
-		text = m.group(0)
-		if text[1] == '#':
-			# Numeric character reference
-			try:
-				if text[2] == 'x':
-					val = int(text[3:-1], 16) # Hexadecimal
-				else:
-					val = int(text[2:-1], 10) # Decimal
-				return unichr(val).encode('ascii', 'replace')
-			except ValueError:
-				return text
-		elif text[1:-1] in htmlentitydefs.name2codepoint:
-			# Character entity reference
-			return unichr(htmlentitydefs.name2codepoint[text[1:-1]]).encode('ascii', 'replace')
-		else:
-			# We can't tell what the user intention was here, leave it be.
-			return text
-
-	return re.sub(r"&#?\w+;", fromhtml, string)
+	if unescaped_string_type == str:
+		return unescaped_string.decode('utf-8')
+	else:
+		return unescaped_string
 
 def escape(str):
 	import urllib
@@ -110,19 +90,16 @@ def extract_nick(host):
 		return host
 
 def read_url(url):
-	import httpget
-	import socket
+	page = { "url": url, "data": "" }
 
-	# THIS AFFECTS SOCKETS GLOBALLY AND SHOULD _NOT_ BE USED!!!
-	timeout_time = socket.getdefaulttimeout()
-	socket.setdefaulttimeout(15)
+	try:
+		headers = { "user-agent": "Pynik/0.1" }
+		response = requests.get(url, headers=headers, timeout=15)
+		page["data"] = response.text
+	except requests.exceptions.RequestException:
+		print "error in read_url", sys.exc_info(), traceback.extract_tb(sys.exc_info()[2])
 
-	data = httpget.read_url(url)
-
-	# THIS AFFECTS SOCKETS GLOBALLY AND SHOULD _NOT_ BE USED!!!
-	socket.setdefaulttimeout(timeout_time)
-
-	return data
+	return page
 
 def save_data(name, data):
 	handle = open(os.path.join('data', name + '.txt'), 'w')
@@ -141,8 +118,7 @@ def load_data(name, default_value=None):
 def has_admin_privileges(source, target):
 	return source in settings.admins
 
-nbsp_latin1 = unescape("&nbsp;")
-nbsp_utf8 = nbsp_latin1.decode("latin-1").encode("utf-8")
+nbsp_utf8 = unescape("&nbsp;")
 
 def currency_conversion(amount, source, target):
 	url = 'http://www.google.com/search?rls=en&q=' + str(amount) + '+' + source + '+in+' + target + '&ie=UTF-8&oe=UTF-8'

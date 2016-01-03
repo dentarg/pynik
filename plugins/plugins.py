@@ -34,6 +34,9 @@ class Plugin(object):
 	def on_privmsg(self, bot, source, target, message):
 		pass
 
+	def on_raw_privmsg(self, bot, source, target, message, raw_line):
+		pass
+
 	def on_quit(self, bot, nick, reason):
 		pass
 

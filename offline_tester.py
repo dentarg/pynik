@@ -37,7 +37,7 @@ tester = OfflineTester()
 print "all right. let's go!"
 while 1:
 	print "> ",
-	line = sys.stdin.readline()
+	line = sys.stdin.readline().decode('utf-8')
 	if not line:
 		break
 	while len(line) > 0 and (line[-1] == '\n' or line[-1] == '\r'):

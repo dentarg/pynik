@@ -46,7 +46,7 @@ class TimedEvent:
 class IRCBot:
 	def __init__(self, address, port, nick, username, realname):
 		self.client = IRCClient(address, port, nick, username, realname)
-		self.client.callbacks = { "on_connected": self.on_connected, "on_join": self.on_join, "on_nick_change": self.on_nick_change, "on_notice": self.on_notice, "on_part": self.on_part, "on_privmsg": self.on_privmsg, "on_quit": self.on_quit }
+		self.client.callbacks = { "on_connected": self.on_connected, "on_join": self.on_join, "on_nick_change": self.on_nick_change, "on_notice": self.on_notice, "on_part": self.on_part, "on_privmsg": self.on_privmsg, "on_raw_privmsg": self.on_raw_privmsg, "on_quit": self.on_quit }
 		self.plugins = []
 		self.timer_heap = PriorityQueue()
 
@@ -83,9 +83,10 @@ class IRCBot:
 		self.execute_plugins("on_part", nick, channel, reason)
 
 	def on_privmsg(self, nick, target, message):
-		#for plugin in plugin_handler.all_plugins():
-		#	plugin.on_privmsg(self, nick, target, message)
 		self.execute_plugins("on_privmsg", nick, target, message)
+
+	def on_raw_privmsg(self, nick, target, message, raw_line):
+		self.execute_plugins("on_raw_privmsg", nick, target, message, raw_line)
 
 	def on_quit(self, nick, reason):
 		self.execute_plugins("on_quit", nick, reason)
