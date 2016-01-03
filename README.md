@@ -50,15 +50,21 @@ twitter_access_token_secret=xxx
 
 ## Dependencies
 
+Pynik make use of the following Python libraries:
+
 * [python-twitter](https://github.com/bear/python-twitter)
 * [requests](https://github.com/kennethreitz/requests)
 * [chardet](https://github.com/chardet/chardet)
 
 ## Development
 
-Install dependencies
+Install dependencies, most of the are for [cryptography](https://cryptography.io/en/latest/installation/), which is used by requests.
 
-    pip install python-twitter requests chardet
+    sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev python-setuptools
+
+    sudo easy_install pip
+
+    noglob sudo pip install --upgrade python-twitter requests[security] chardet
 
 Install [Honcho] if you don't have it
 
