@@ -48,11 +48,17 @@ twitter_access_token_key=xxx
 twitter_access_token_secret=xxx
 ```
 
+## Dependencies
+
+* [python-twitter](https://github.com/bear/python-twitter)
+* [requests](https://github.com/kennethreitz/requests)
+* [chardet](https://github.com/chardet/chardet)
+
 ## Development
 
-[python-twitter](https://github.com/bear/python-twitter) is a dependency, install it with
+Install dependencies
 
-    pip install python-twitter
+    pip install python-twitter requests chardet
 
 Install [Honcho] if you don't have it
 

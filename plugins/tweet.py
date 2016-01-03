@@ -38,13 +38,12 @@ def get_tweet_text_and_user(tweet):
 
 	status = api.GetStatus(tweet.idno)
 
-	# Use latin-1 to make IRCClient.send() happy
-	tweet.text = status.text.encode('latin-1', 'replace')
-	tweet.screen_name = status.user.screen_name.encode('latin-1', 'replace')
+	tweet.text = status.text
+	tweet.screen_name = status.user.screen_name
 
 	for url in status.urls:
-		latin_url = url.url.encode('latin-1', 'replace')
-		latin_expanded_url = url.expanded_url.encode('latin-1', 'replace')
+		latin_url = url.url
+		latin_expanded_url = url.expanded_url
 		tweet.text = tweet.text.replace(latin_url, latin_expanded_url)
 
 	return tweet
@@ -57,9 +56,8 @@ def get_user_description(tweet):
 
 	user = api.GetUser(screen_name=tweet.screen_name)
 
-	# Use latin-1 to make IRCClient.send() happy
-	tweet.user_name = user.name.encode('latin-1', 'replace')
-	tweet.user_description = user.description.encode('latin-1', 'replace')
+	tweet.user_name = user.name
+	tweet.user_description = user.description
 	return tweet
 
 def get_tweet(message):

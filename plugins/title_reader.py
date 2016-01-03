@@ -74,6 +74,7 @@ class TitleReaderPlugin(Command):
 				if not tweetbool and target in settings.title_channels:
 					bot.tell(target, self.clean(url, title))
 			except utility.TimeoutException:
+				print "TitleReaderPlugin utility.TimeoutException for %s" % (url)
 				pass
 
 

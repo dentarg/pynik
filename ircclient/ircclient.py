@@ -71,7 +71,9 @@ class IRCClient:
 
 		self.last_action = datetime.datetime.now()
 
-		data = line + "\r\n"
+		full_line = line + "\r\n"
+		# unicode -> bytes
+		data = full_line.encode('utf-8')
 
 		while data:
 			sent =  self.s.send(data)
@@ -202,13 +204,16 @@ class IRCClient:
 		self.send("PONG :" + tupels[4])
 
 	def on_privmsg(self, tupels):
-		source, target, message = tupels[2], tupels[4], tupels[5]
+		source, target, message, raw_line = tupels[2], tupels[4], tupels[5], tupels[6]
 
 		if target[0] != '#':
 			target = source
 
 		if "on_privmsg" in self.callbacks:
 			self.callbacks["on_privmsg"](source, target, message)
+
+		if "on_raw_privmsg" in self.callbacks:
+			self.callbacks["on_raw_privmsg"](source, target, message, raw_line)
 
 	def on_notice(self, tupels):
 		source, target, message = tupels[2], tupels[4], tupels[5]
@@ -253,16 +258,20 @@ class IRCClient:
 					self.recv_buf += retn
 					recv_lines = self.recv_buf.splitlines(True)
 					self.recv_buf = ''
-					for line in recv_lines:
-						if not line.endswith("\r\n"):
-							self.recv_buf = line
+					for raw_line in recv_lines:
+						if not raw_line.endswith("\r\n"):
+							self.recv_buf = raw_line
 						else:
-							line = line.rstrip("\r\n")
+							raw_line = raw_line.rstrip("\r\n")
+
+							# bytes -> unicode
+							line = raw_line.decode('utf-8', 'replace')
+
 							self.log_line(timestamp() + " RECV: " + line)
 							m = self.irc_message_pattern.match(line)
 							if m:
 								if m.group(3) in self.message_handlers:
-									self.message_handlers[m.group(3)](m.group(0, 1, 2, 3, 4, 5))
+									self.message_handlers[m.group(3)](m.group(0, 1, 2, 3, 4, 5) + (raw_line,))
 
 			except socket.error, (error_code, error_message):
 				if error_code != errno.EWOULDBLOCK:

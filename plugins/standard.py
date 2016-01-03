@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from __future__ import unicode_literals
 from commands import Command
 import htmlentitydefs
 import string
@@ -138,9 +139,6 @@ class HelpCommand(Command):
 		else:
 			return "That's not a command! Try `help <command>`"
 
-#	def can_trigger(self, source, trigger):
-#		return source in ['serp!~serp@85.8.2.181.se.wasadata.net']
-
 _get_temp_re = re.compile('^\s*(.+)\s*$')
 class TempCommand(Command):
 	def __init__(self):
@@ -194,7 +192,7 @@ class TempCommand(Command):
 
 class GoogleCommand(Command):
 	def trig_google(self, bot, source, target, trigger, argument):
-		url = 'http://www.google.com/search?rls=en&q=' + utility.escape(argument) + '&ie=UTF-8&oe=UTF-8'
+		url = 'http://www.google.com/search?rls=en&q=' + argument + '&ie=UTF-8&oe=UTF-8'
 
 		response = utility.read_url(url)
 
@@ -202,8 +200,6 @@ class GoogleCommand(Command):
 
 		data = re.sub(r"\n|\r|\r\n", "", data)
 		data = re.sub(r" +", " ", data)
-
-		print data
 
 		# try to extract video result
 		m = re.search(r'Video results for <em>.*?<\/em>.*?<td valign=top style="padding-right:10px"><a href="(.*?)" class=l.*?>(.*?)</a><br>',data)
@@ -218,7 +214,8 @@ class GoogleCommand(Command):
 		m = re.search('.*?font-size:138%">(.*?)<', data)
 		if m:
 			answer = m.group(1)
-			answer = answer.replace(' &#215;', '×').replace('<sup>', '^')
+			answer = utility.unescape(answer)
+			answer = answer.replace('<sup>', '^')
 			answer = re.sub('<.+?>', '', answer)
 			return answer
 
@@ -311,17 +308,6 @@ class WikipediaCommand(Command):
 				return "%s - %s" % (data, url)
 
 		return "I couldn't find an article... :("
-
-class AAOCommand(Command):
-	triggers = ['}{|', 'åäö', 'Ã¥Ã¤Ã¶']
-
-	def on_trigger(self, bot, source, target, trigger, argument):
-			if trigger == 'åäö':
-				return source+": Du använder nog Latin-1"
-			elif trigger == '}{|':
-				return source+": Du använder nog ISO-646"
-			else:
-				return source+": Du använder nog UTF-8"
 
 class CollectCommand(Command):
 	def trig_collect(self, bot, source, target, trigger, argument):
