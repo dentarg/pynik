@@ -58,7 +58,7 @@ Pynik make use of the following Python libraries:
 
 ## Development
 
-Install dependencies, most of the are for [cryptography](https://cryptography.io/en/latest/installation/), which is used by requests.
+Install dependencies, most of them are for [cryptography](https://cryptography.io/en/latest/installation/), which is used by requests.
 
     sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev python-setuptools
 
