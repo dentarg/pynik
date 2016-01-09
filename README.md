@@ -64,7 +64,7 @@ Install dependencies, most of them are for [cryptography](https://cryptography.i
 
     sudo easy_install pip
 
-    noglob sudo -H pip install --upgrade python-twitter requests[security] chardet
+    noglob sudo -H pip install --upgrade python-twitter requests[security] chardet beautifulsoup4 html5lib
 
 Install [Honcho] if you don't have it
 

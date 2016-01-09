@@ -95,7 +95,10 @@ def read_url(url):
 	try:
 		headers = { "user-agent": "Pynik/0.1" }
 		response = requests.get(url, headers=headers, timeout=15)
-		page["data"] = response.text
+		page["headers"] = response.headers
+		page["encoding"] = response.encoding
+		page["raw_content"] = response.content
+		page["data"] = response.text # compatibility with old plugins
 	except requests.exceptions.RequestException:
 		print "error in read_url", sys.exc_info(), traceback.extract_tb(sys.exc_info()[2])
 

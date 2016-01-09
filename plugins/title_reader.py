@@ -8,6 +8,7 @@ import settings
 from plugins import Plugin
 from commands import Command
 import command_catcher
+from bs4 import BeautifulSoup
 
 class URL():
 	url = ''
@@ -33,18 +34,21 @@ def get_title(url):
 	if response == None:
 		return None
 
-	data = response["data"]
-	data = data.replace("\r", "").replace("\n", "")
+	# workaround ISO-8859-1 charset fallback in requests
+	# https://github.com/kennethreitz/requests/issues/2086
+	if "charset" in response["headers"]["Content-Type"]:
+		possible_encoding = response["encoding"]
+	else:
+		possible_encoding = False
 
-	m = re.search('<title[^>]*>\s*(.+?)\s*<\/title>', data, re.IGNORECASE|re.MULTILINE)
+	markup = response["raw_content"]
+	soup = BeautifulSoup(markup, "html5lib", from_encoding=possible_encoding)
+	title_tag = soup.title
 
-	if m:
-		title = m.group(1)
-		title = re.sub('\s+', ' ', title)
-		return utility.unescape(re.sub('<.+?>', '', title))
+	if title_tag:
+		return title_tag.text
 	else:
 		return None
-
 
 class TitleReaderPlugin(Command):
 	hooks = ['on_privmsg']
