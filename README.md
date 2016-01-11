@@ -55,12 +55,16 @@ Pynik make use of the following Python libraries:
 * [python-twitter](https://github.com/bear/python-twitter)
 * [requests](https://github.com/kennethreitz/requests)
 * [chardet](https://github.com/chardet/chardet)
+* [Beautiful Soup](http://www.crummy.com/software/BeautifulSoup/)
+* [html5lib](https://github.com/html5lib/html5lib-python)
 
 ## Development
 
-Install dependencies, most of them are for [cryptography](https://cryptography.io/en/latest/installation/), which is used by requests.
+Install dependencies for dependencies, most of them are for [cryptography](https://cryptography.io/en/latest/installation/), which is used by requests.
 
     sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev python-setuptools
+
+Install bot dependencies.
 
     sudo easy_install pip
 
