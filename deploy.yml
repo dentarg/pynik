@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: fetch github master
+    git: repo=https://github.com/dentarg/pynik.git
+         dest=~/pynik
+         version=master
