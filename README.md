@@ -58,7 +58,7 @@ Pynik make use of the following Python libraries:
 * [Beautiful Soup](http://www.crummy.com/software/BeautifulSoup/)
 * [html5lib](https://github.com/html5lib/html5lib-python)
 
-## Development
+## Development / deployment
 
 Install dependencies for dependencies, most of them are for [cryptography](https://cryptography.io/en/latest/installation/), which is used by requests.
 
@@ -68,7 +68,7 @@ Install bot dependencies.
 
     sudo easy_install pip
 
-    noglob sudo -H pip install --upgrade python-twitter requests[security] chardet beautifulsoup4 html5lib
+    sudo -H pip install --upgrade -r requirements.txt
 
 Install [Honcho] if you don't have it
 
