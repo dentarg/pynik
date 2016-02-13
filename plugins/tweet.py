@@ -3,6 +3,7 @@ import re
 import sys
 import twitter
 import settings
+from bs4 import BeautifulSoup
 from json import JSONDecoder
 from commands import Command
 
@@ -38,7 +39,7 @@ def get_tweet_text_and_user(tweet):
 
 	status = api.GetStatus(tweet.idno)
 
-	tweet.text = status.text
+	tweet.text = BeautifulSoup(status.text, "html5lib").get_text()
 	tweet.screen_name = status.user.screen_name
 
 	for url in status.urls:
