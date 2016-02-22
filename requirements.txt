@@ -1,5 +1,5 @@
+beautifulsoup4
+chardet
+html5lib
 python-twitter
 requests[security]
-chardet
-beautifulsoup4
-html5lib
