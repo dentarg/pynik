@@ -1,5 +1,18 @@
 ---
-- hosts: all
+- hosts: rufwebotadmin
+  gather_facts: no
+  become: yes
+  tasks:
+  - name: create directory for requirements.txt
+    file: path=~/pynik_deploy state=directory
+
+  - name: copy requirements.txt
+    copy: src=requirements.txt dest=~/pynik_deploy/requirements.txt
+
+  - name: install requirements
+    pip: requirements=~/pynik_deploy/requirements.txt
+
+- hosts: rufwebot
   gather_facts: no
   tasks:
   - name: fetch github master
