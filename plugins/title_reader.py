@@ -9,6 +9,7 @@ from plugins import Plugin
 from commands import Command
 import command_catcher
 from bs4 import BeautifulSoup
+import bleach
 
 class URL():
 	url = ''
@@ -62,12 +63,12 @@ class TitleReaderPlugin(Command):
 
 
 	def on_privmsg(self, bot, source, target, message):
-		m = re.search('((https?:\/\/|www\.)\S+)', message, re.IGNORECASE)
+		m = BeautifulSoup(bleach.linkify(message), 'html5lib').find('a')
 
 		if m:
-			url = m.group(1)
+			url = m.attrs['href']
 			self.urls[target] = URL()
-			self.urls[target].url = m.group(1)
+			self.urls[target].url = url
 			self.urls[target].nick = source
 			self.urls[target].timestamp = 'test'
 			tweetbool = tweet.match_tweet_url(url)
