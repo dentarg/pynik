@@ -3,13 +3,22 @@
   gather_facts: no
   become: yes
   tasks:
+  - name: install dependencies for dependencies
+    apt: update_cache=yes name={{ item }} state=present
+    with_items:
+      - build-essential
+      - libssl-dev
+      - libffi-dev
+      - python-dev
+      - python-setuptools
+
   - name: create directory for requirements.txt
     file: path=~/pynik_deploy state=directory
 
   - name: copy requirements.txt
     copy: src=requirements.txt dest=~/pynik_deploy/requirements.txt
 
-  - name: install requirements
+  - name: install dependencies
     pip: requirements=~/pynik_deploy/requirements.txt
 
 - hosts: rufwebot
