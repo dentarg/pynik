@@ -36,7 +36,7 @@
          version=master
 
   - name: prepare crontab
-    cronvar: name=PATH value="$PATH:/usr/local/bin" user=rufwebot
+    cronvar: name=PATH value="/usr/bin:/bin:/usr/local/bin" user=rufwebot
 
   - name: install crontab
     cron: name=rufwebotqnet special_time=reboot user=rufwebot
