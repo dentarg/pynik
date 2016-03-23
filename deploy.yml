@@ -21,6 +21,12 @@
   - name: install dependencies
     pip: requirements=~/pynik_deploy/requirements.txt
 
+  - name: install deploy dependencies (apt)
+    apt: name=screen state=present
+
+  - name: install deploy dependencies (pip)
+    pip: name=honcho
+
 - hosts: rufwebot
   gather_facts: no
   tasks:
@@ -28,3 +34,10 @@
     git: repo=https://github.com/dentarg/pynik.git
          dest=~/pynik
          version=master
+
+  - name: prepare crontab
+    cronvar: name=PATH value="$PATH:/usr/local/bin" user=rufwebot
+
+  - name: install crontab
+    cron: name=rufwebotqnet special_time=reboot user=rufwebot
+          job="(cd ~/pynik; screen -d -m -S tigerbot honcho run python main.py)"
