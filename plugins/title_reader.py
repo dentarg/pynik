@@ -63,10 +63,14 @@ class TitleReaderPlugin(Command):
 
 
 	def on_privmsg(self, bot, source, target, message):
-		m = BeautifulSoup(bleach.linkify(message), 'html5lib').find('a')
+		link = None
+		haz_url = re.search('https?:\/\/', message, re.IGNORECASE)
 
-		if m:
-			url = m.attrs['href']
+		if haz_url:
+			link = BeautifulSoup(bleach.linkify(message), 'html5lib').find('a')
+
+		if link:
+			url = link.attrs['href']
 			self.urls[target] = URL()
 			self.urls[target].url = url
 			self.urls[target].nick = source
