@@ -47,7 +47,12 @@ def get_title(url):
 	title_tag = soup.title
 
 	if title_tag:
-		return title_tag.text.strip()
+		title = title_tag.text.strip()
+
+		if title.lower() in url:
+			return None
+		else:
+			return title
 	else:
 		return None
 
