@@ -10,6 +10,8 @@ channels       = os.environ['CHANNELS'].split(',')
 title_channels = map(lambda x: x.strip(),
         os.environ['TITLE_CHANNELS'].split(','))
 
+http_accept_language = os.environ.get('HTTP_ACCEPT_LANGUAGE')
+
 twitter_consumer_key        = os.environ['twitter_consumer_key']
 twitter_consumer_secret     = os.environ['twitter_consumer_secret']
 twitter_access_token_key    = os.environ['twitter_access_token_key']

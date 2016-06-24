@@ -94,7 +94,12 @@ def read_url(url):
 
 	try:
 		headers = { "user-agent": "Pynik/0.1" }
+
+		if settings.http_accept_language:
+			headers["Accept-Language"] = settings.http_accept_language
+
 		response = requests.get(url, headers=headers, timeout=15)
+
 		page["headers"] = response.headers
 		page["encoding"] = response.encoding
 		page["raw_content"] = response.content

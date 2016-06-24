@@ -18,6 +18,7 @@ Configure your bot with the following environment variables:
 | ADMINS                 | Nicknames with bot admin privileges.              |
 | CHANNELS               | Channels the bot should join on start.            |
 | TITLE_CHANNELS         | Print the `<title>` of URLs in these channels.    |
+| HTTP_ACCEPT_LANGUAGE         | If present, use this value in the HTTP `Accept-Language` header. |
 | twitter_consumer_key         | Twitter API key.                            |
 | twitter_consumer_secret      | Twitter API secret.                         |
 | twitter_access_token_key     |                                             |
@@ -41,6 +42,7 @@ REALNAME="Freeze? I'm a robot. I'm not a refrigerator."
 ADMINS="dentarg, serp"
 CHANNELS="#foo, #bar, #baz"
 TITLE_CHANNELS="#foo, #bar"
+HTTP_ACCEPT_LANGUAGE="sv, en"
 
 twitter_consumer_key=xxx
 twitter_consumer_secret=xxx
