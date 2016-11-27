@@ -1,6 +1,6 @@
 beautifulsoup4
 bleach
 chardet
-html5lib
+html5lib==0.9999999
 python-twitter
 requests[security]
