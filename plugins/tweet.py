@@ -24,10 +24,10 @@ class Tweet:
 
 # called in plugins/title_reader.py
 def match_tweet_url(url):
-	status_regexp = '(http|https)://twitter.com/((#!/(\w+))|(\w+))/(status|statuses)/(\d+)'
+	status_regexp = '(http|https)://(mobile.|www.|)twitter.com/((#!/(\w+))|(\w+))/(status|statuses)/(?P<idno>\d+)'
 	match = re.search(status_regexp, url, re.IGNORECASE)
 	if not match:
-		user_regexp = '(http|https):\/\/twitter.com\/(\w+)'
+		user_regexp = '(http|https):\/\/twitter.com\/(?P<screen_name>\w+)'
 		match = re.search(user_regexp, url, re.IGNORECASE)
 	return match
 
@@ -67,11 +67,11 @@ def get_tweet(message):
 	if match:
 		if len(match.groups()) == 2:
 			tweet.is_user = True
-			tweet.screen_name = match.group(2)
+			tweet.screen_name = match.group('screen_name')
 			tweet = get_user_description(tweet)
 			return tweet
 		else:
-			tweet.idno = match.group(7)
+			tweet.idno = match.group('idno')
 			tweet = get_tweet_text_and_user(tweet)
 			return tweet
 	else:
