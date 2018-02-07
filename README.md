@@ -70,12 +70,16 @@ Install bot dependencies.
 
     sudo -H pip install --upgrade -r requirements.txt
 
-Install [Honcho] if you don't have it
+Install [foreman] if you don't have it
 
-    pip install honcho
+    gem install foreman
 
 Start the bot
 
-    honcho run python main.py
+    foreman start
 
-[Honcho]: https://github.com/nickstenning/honcho
+Start the bot in offline mode
+
+    foreman run offline
+
+[foreman]: https://github.com/ddollar/foreman
