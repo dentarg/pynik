@@ -62,7 +62,7 @@ Pynik make use of the following Python libraries:
 
 ## Development / deployment
 
-Install dependencies for dependencies, most of them are for [cryptography](https://cryptography.io/en/latest/installation/), which is used by requests. See [`deploy.yml`](deploy.yml) for what packages to install.
+Install dependencies for dependencies, most of them are for [cryptography], which is used by requests. See [`deploy.yml`](deploy.yml) for what packages to install.
 
 Install bot dependencies.
 
@@ -82,4 +82,5 @@ Start the bot in offline mode
 
     foreman run offline
 
+[cryptography]: https://cryptography.io/en/latest/installation/
 [foreman]: https://github.com/ddollar/foreman
